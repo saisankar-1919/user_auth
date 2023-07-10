@@ -7,7 +7,6 @@ module.exports = async (args, req) => {
    try{
     const payload = jwt.verify(req.headers.token, process.env.JWT_SECRET)
     if(payload){
-        console.log("payloc", payload)
         return{
             isValid:true,
             message:'Token validation successful',
