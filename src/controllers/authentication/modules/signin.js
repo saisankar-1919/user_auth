@@ -35,7 +35,7 @@ module.exports = async (args, req) => {
     const passwordMatch = await comparePassword(args.password, user.password);
 
     if (passwordMatch) {
-      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ user_id: user.id, role_id: user.user_role_id }, process.env.JWT_SECRET);
       return {
         token,
         error: null,
