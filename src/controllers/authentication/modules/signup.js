@@ -23,6 +23,7 @@ module.exports = async (args, req) => {
         name: args.name,
         email: args.email,
         phone: args.phone,
+        user_role_id: 1,
         password: hashPassword,
       },
     });
@@ -37,7 +38,7 @@ module.exports = async (args, req) => {
       };
     }
 
-    const token = jwt.sign({ id: createUser.id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ user_id: createUser.id, role_id: createUser.user_role_id }, process.env.JWT_SECRET);
 
     await prisma.users.update({
       where: {
