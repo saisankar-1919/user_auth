@@ -35,4 +35,12 @@ graphqlHTTP({
   customFormatErrorFn: errorHandling,
 }))
 
+router.use('/validate-token',
+graphqlHTTP({
+  schema: require("../controllers/authorization/schema"),
+  rootValue: require("../controllers/authorization/resolver"),
+  graphiql: true,
+  customFormatErrorFn: errorHandling,
+}))
+
 module.exports = router;
