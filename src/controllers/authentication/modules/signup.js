@@ -18,15 +18,30 @@ module.exports = async (args, req) => {
 
     const hashPassword = await encryptPassword(args.password);
 
-    const createUser = await prisma.users.create({
-      data: {
-        name: args.name,
-        email: args.email,
-        phone: args.phone,
-        user_role_id: 1,
-        password: hashPassword,
-      },
-    });
+    let createUser;
+    try {
+      createUser = await prisma.users.create({
+        data: {
+          name: args.name,
+          email: args.email,
+          phone: args.phone,
+          user_role_id: 1,
+          password: hashPassword,
+        },
+      });
+    } catch (error) {
+      if (error.name == 'PrismaClientKnownRequestError' && error.code === 'P2002') {
+        // Handle email uniqueness constraint violation
+        return {
+          token: null,
+          error: {
+            code: 400,
+            message: "Email is already in use",
+          },
+        };
+      }
+      throw error;
+    }
 
     if (!createUser) {
       return {
